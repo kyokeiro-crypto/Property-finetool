@@ -232,27 +232,37 @@ export default function App() {
                     切り取り位置の調整 (上から {cropPercent}%)
                   </label>
                 </div>
-                <input 
-                  type="range" 
-                  min="50" 
-                  max="100" 
-                  value={cropPercent} 
-                  onChange={(e) => setCropPercent(Number(e.target.value))}
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
-                />
                 
-                <div className="mt-4 border rounded-lg overflow-hidden bg-gray-100 relative">
-                  {/* Visual Preview */}
-                  {mergedImg ? (
-                    <img src={mergedImg} alt="Merged Preview" className="w-full h-auto block" />
-                  ) : (
-                    <div className="relative w-full">
-                      <img src={flyerImg} alt="Flyer Preview" className="w-full h-auto block opacity-50" />
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="bg-white/80 px-3 py-1 rounded text-sm font-medium">帯画像をアップロードしてください</span>
-                      </div>
+                <div className="flex gap-4 mt-2">
+                  {/* Vertical Slider */}
+                  <div className="flex flex-col items-center py-4 h-[500px] w-12 bg-gray-50 rounded-lg border border-gray-200 shrink-0">
+                    <span className="text-xs text-gray-500 font-medium mb-4">50%</span>
+                    <div className="relative flex-1 w-full flex items-center justify-center">
+                      <input 
+                        type="range" 
+                        min="50" 
+                        max="100" 
+                        value={cropPercent} 
+                        onChange={(e) => setCropPercent(Number(e.target.value))}
+                        className="w-[380px] h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer accent-blue-600 rotate-90 absolute origin-center"
+                      />
                     </div>
-                  )}
+                    <span className="text-xs text-gray-500 font-medium mt-4">100%</span>
+                  </div>
+
+                  {/* Visual Preview */}
+                  <div className="flex-1 border rounded-lg overflow-y-auto bg-gray-100 relative max-h-[500px]">
+                    {mergedImg ? (
+                      <img src={mergedImg} alt="Merged Preview" className="w-full h-auto block" />
+                    ) : (
+                      <div className="relative w-full">
+                        <img src={flyerImg} alt="Flyer Preview" className="w-full h-auto block opacity-50" />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="bg-white/80 px-3 py-1 rounded text-sm font-medium">帯画像をアップロードしてください</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 {mergedImg && (
