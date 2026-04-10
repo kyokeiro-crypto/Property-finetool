@@ -245,7 +245,7 @@ export default function App() {
           <div className="bg-blue-600 p-2 rounded-lg">
             <Scissors className="w-5 h-5 text-white" />
           </div>
-          <h1 className="text-xl font-bold text-gray-800">不動産マーケティング Studio</h1>
+          <h1 className="text-xl font-bold text-gray-800">Ambitious物件信息处理</h1>
         </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">
