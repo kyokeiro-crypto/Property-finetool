@@ -16,9 +16,19 @@ export default function App() {
   const [isProcessingPdf, setIsProcessingPdf] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [aiText, setAiText] = useState<string>('');
+  const [apiKey, setApiKey] = useState<string>(localStorage.getItem('gemini_api_key') || '');
 
   const flyerInputRef = useRef<HTMLInputElement>(null);
   const obiInputRef = useRef<HTMLInputElement>(null);
+
+  // Save API key to local storage
+  useEffect(() => {
+    if (apiKey) {
+      localStorage.setItem('gemini_api_key', apiKey);
+    } else {
+      localStorage.removeItem('gemini_api_key');
+    }
+  }, [apiKey]);
 
   // Handle Flyer Upload (PDF or Image)
   const handleFlyerUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -118,9 +128,18 @@ export default function App() {
       alert('先に物件の図面（マイソク）をアップロードしてください。');
       return;
     }
+    
+    // Use user-provided API key or fallback to environment variable (for AI Studio preview)
+    const activeApiKey = apiKey || process.env.GEMINI_API_KEY;
+    
+    if (!activeApiKey) {
+      alert('Gemini API Key を入力してください。');
+      return;
+    }
+
     setIsGenerating(true);
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+      const ai = new GoogleGenAI({ apiKey: activeApiKey });
       const base64Data = flyerImg.split(',')[1];
       
       const prompt = `あなたはプロの不動産仲介エージェントです。
@@ -168,8 +187,20 @@ export default function App() {
           </div>
           <h1 className="text-xl font-bold text-gray-800">不動産マーケティング Studio</h1>
         </div>
-        <div className="text-sm text-gray-500">
-          帯替え & AI文案生成ツール
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">
+            <span className="text-xs font-medium text-gray-500">API Key:</span>
+            <input 
+              type="password" 
+              value={apiKey}
+              onChange={(e) => setApiKey(e.target.value)}
+              placeholder="Gemini API Key を入力"
+              className="bg-transparent border-none focus:ring-0 text-sm w-48 text-gray-700 placeholder-gray-400 outline-none"
+            />
+          </div>
+          <div className="text-sm text-gray-500 hidden md:block">
+            帯替え & AI文案生成ツール
+          </div>
         </div>
       </header>
 
