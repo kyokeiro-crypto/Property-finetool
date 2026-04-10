@@ -39,7 +39,18 @@ export default function App() {
       setIsProcessingPdf(true);
       try {
         const arrayBuffer = await file.arrayBuffer();
-        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        
+        // Configure PDF.js for Japanese fonts and complex embedded images
+        const CMAP_URL = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/cmaps/`;
+        const STANDARD_FONTS_URL = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/standard_fonts/`;
+        
+        const pdf = await pdfjsLib.getDocument({ 
+          data: arrayBuffer,
+          cMapUrl: CMAP_URL,
+          cMapPacked: true,
+          standardFontDataUrl: STANDARD_FONTS_URL
+        }).promise;
+        
         const page = await pdf.getPage(1);
         const viewport = page.getViewport({ scale: 2.0 }); // High res for better quality
         const canvas = document.createElement('canvas');
